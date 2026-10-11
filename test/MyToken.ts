@@ -27,7 +27,6 @@ describe("mytoken deploy", () => {
     it("should return 0 totalSupply", async () => {
     expect(await myTokenC.totalSupply()).equal(1n * 10n ** 18n);
   });
-  // 1MT = 1*10^18
   it("should return 1MT balance for signer 0", async () => {
     const signer0 = signers[0];
     expect(await myTokenC.balanceOf(signer0)).equal(1n * 10n ** 18n);
@@ -41,7 +40,6 @@ describe("mytoken deploy", () => {
   });
 
   describe("TransferFrom", () => {
-    // fresh deploy: signer0 1MT, signer1 0MT
     before("should deploy", async () => {
       myTokenC = await hre.ethers.deployContract("MyToken", [
         "MyToken",
@@ -57,7 +55,6 @@ describe("mytoken deploy", () => {
         .to.emit(myTokenC, "Approval")
         .withArgs(signer1.address, hre.ethers.parseUnits("10", decimals));
     });
-    // signer1 moves signer0's MT to itself
     it("should transfer 0.3MT from signer0 to signer1 by signer1", async () => {
       const signer0 = signers[0];
       const signer1 = signers[1];
@@ -77,7 +74,6 @@ describe("mytoken deploy", () => {
           hre.ethers.parseUnits("0.3", decimals)
         );
     });
-    // signer0: 1MT - 0.3MT, signer1: 0MT + 0.3MT
     it("should have 0.7MT for signer0 and 0.3MT for signer1", async () => {
       expect(await myTokenC.balanceOf(signers[0].address)).equal(
         hre.ethers.parseUnits("0.7", decimals)
